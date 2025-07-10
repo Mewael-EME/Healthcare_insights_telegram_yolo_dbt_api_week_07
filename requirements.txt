@@ -1,1 +1,25 @@
+# FastAPI and serving
+fastapi
+uvicorn
+
+# DB access
+psycopg2-binary
+sqlalchemy
+python-dotenv
+
+# Data scraping
+telethon
+
+# Object Detection
+ultralytics
+
+# Data orchestration
+dagster
+dagster-webserver
+
+# dbt core for PostgreSQL
+dbt-postgres
+
+# Pandas or other common tools
+pandas
 

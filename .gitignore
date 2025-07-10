@@ -1,1 +1,32 @@
+# Ignore Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
 
+# Ignore Jupyter notebooks checkpoints (if any)
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Ignore environment variable files
+.env
+session_*.session
+
+# Ignore raw and processed data
+data/
+
+# Ignore logs
+logs/
+
+# Ignore dbt target folders
+dbt_project/target/
+dbt_project/dbt_modules/
+
+
+# System files
+.DS_Store
