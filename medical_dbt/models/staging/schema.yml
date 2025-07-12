@@ -1,0 +1,23 @@
+version: 2
+
+sources:
+  - name: raw
+    # database: telegram_medical   <-- REMOVE or COMMENT OUT this line!
+    schema: public
+    tables:
+      - name: telegram_messages
+
+models:
+  - name: stg_telegram_messages
+    description: "Staging model for telegram messages"
+    columns:
+      - name: id
+        description: "Unique identifier"
+        tests:
+          - not_null
+          - unique
+      - name: message
+      - name: channel_id
+      - name: sent_at
+      - name: message_length
+      - name: has_image
