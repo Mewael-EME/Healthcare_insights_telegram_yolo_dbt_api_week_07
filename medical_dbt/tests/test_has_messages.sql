@@ -1,1 +1,3 @@
-SELECT * FROM {{ ref('fct_messages') }} WHERE message IS NULL;
+select *
+from {{ ref('fct_messages') }}
+where message is null or trim(message) = ''
