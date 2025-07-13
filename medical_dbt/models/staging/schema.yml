@@ -2,22 +2,36 @@ version: 2
 
 sources:
   - name: raw
-    # database: telegram_medical   <-- REMOVE or COMMENT OUT this line!
-    schema: public
+    schema: raw
     tables:
       - name: telegram_messages
 
 models:
   - name: stg_telegram_messages
-    description: "Staging model for telegram messages"
+    description: "Flattened staging model from raw JSON"
     columns:
       - name: id
-        description: "Unique identifier"
         tests:
           - not_null
           - unique
-      - name: message
       - name: channel_id
+        tests:
+          - not_null
       - name: sent_at
-      - name: message_length
-      - name: has_image
+        tests:
+          - not_null
+
+  - name: dim_dates
+    description: "Date dimension table"
+
+  - name: dim_channels
+    description: "Channel dimension table"
+
+  - name: fct_messages
+    description: "Fact table of all telegram messages"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
