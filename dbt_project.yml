@@ -1,0 +1,25 @@
+name: 'medical_dbt'
+version: '1.0.0'
+
+profile: 'medical_dbt'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+sources:
+  raw:
+    +database: null
+
+models:
+  medical_dbt:
+    +database: null
+    example:
+      +materialized: view

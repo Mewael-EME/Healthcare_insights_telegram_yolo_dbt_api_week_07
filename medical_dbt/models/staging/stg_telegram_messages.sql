@@ -1,13 +1,25 @@
+-- models/staging/stg_telegram_messages.sql
+
 with source as (
     select *
-    from "telegram_medical"."public"."telegram_messages"
+    from {{ source('raw', 'telegram_messages') }}
+),
+
+flattened as (
+    select
+        (data->>'id')::bigint               as id,
+        (data->>'message')                  as message,
+        (data->>'channel_id')::bigint       as channel_id,
+        (data->>'date')::timestamp          as sent_at,
+        (data->>'photo')                    as photo
+    from source
 )
 
 select
     id,
-    data ->> 'message' as message,
-    data ->> 'channel_id' as channel_id,
-    (data ->> 'sent_at')::timestamp as sent_at,
-    length(data ->> 'message') as message_length,
-    case when data ? 'photo' then true else false end as has_image
-from source
+    message,
+    channel_id,
+    sent_at,
+    length(message) as message_length,
+    photo is not null as has_image
+from flattened

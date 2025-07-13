@@ -39,7 +39,7 @@ def load_json_to_postgres():
     conn.commit()
     cur.close()
     conn.close()
-    print("✅ All JSON data loaded into raw.telegram_messages")
+    print(f"✅ Inserted {len(messages)} messages from {file_path}")
 
 if __name__ == "__main__":
     load_json_to_postgres()
