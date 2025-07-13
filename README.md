@@ -1,91 +1,105 @@
-# Healthcare Insights Telegram YOLO DBT API Project
+# 🧠 Healthcare Insights Telegram Project
 
-## Project Overview
-
-This project collects and analyzes Telegram channel data related to healthcare insights. It includes:
-
-- Data scraping from Telegram channels
-- Data storage in a structured JSON format
-- Data transformation and validation using dbt with PostgreSQL
-- Dockerized environment for easy setup and deployment
+This project extracts data from Telegram channels, stores it in a PostgreSQL database, and transforms it using dbt for analytical insights.
 
 ---
 
-## Project Structure
-/data/raw/YYYY-MM-DD/channelname.json # Raw scraped Telegram messages
-/telegram_data_pipeline/ # Python scraper scripts
-/medical_dbt/ # dbt project with models and tests
-/Dockerfile, docker-compose.yml # Docker configuration files
-requirements.txt # Python dependencies
-.env # Environment variables (excluded from git)
-README.md # Project documentation
+## ⚙️ 1. Project Setup
 
+### 🔐 Environment Variables
 
----
+Create a `.env` file with the following:
 
-## Setup Instructions
+```env
+API_ID=your_api_id
+API_HASH=your_api_hash
+PHONE_NUMBER=+251XXXXXX
 
-### 1. Clone the Repository
+PG_HOST=localhost
+PG_PORT=5432
+PG_USER=postgres
+PG_PASS=2328
+PG_DB=telegram_medical
 
-```bash
-git clone https://github.com/Mewael-EME/Healthcare_insights_telegram_yolo_dbt_api_week_07.git
-cd Healthcare_insights_telegram_yolo_dbt_api_week_07
+📦 Install Dependencies
 
-2. Set up Environment Variables
-
-Create a .env file in the root directory with the following variables:
-TELEGRAM_API_ID=your_telegram_api_id
-TELEGRAM_API_HASH=your_telegram_api_hash
-POSTGRES_USER=your_postgres_user
-POSTGRES_PASSWORD=your_postgres_password
-POSTGRES_DB=your_postgres_database
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-
-3. Install Python Dependencies
 pip install -r requirements.txt
 
-4. Running the Telegram Scraper
 
-Run the data collection script to scrape messages:
+🛠️ 2. Running the Pipeline
+📥 Scrape Telegram Data
 
-python telegram_data_pipeline/scraper.py
+python scrapers/scrape_telegram.py
 
-Scraped data will be saved under:
-data/raw/YYYY-MM-DD/channelname.json
+💾 Load Data into PostgreSQL
 
-5. Set up PostgreSQL and dbt
+python loaders/load_raw_to_postgres.py
 
-    Ensure PostgreSQL is running and accessible with credentials matching .env.
+🔄 Run DBT Models
 
-    Configure ~/.dbt/profiles.yml with:
+Move to the dbt project directory:
 
-your_project_name:
-  target: dev
-  outputs:
-    dev:
-      type: postgres
-      host: localhost
-      user: your_postgres_user
-      password: your_postgres_password
-      port: 5432
-      dbname: your_postgres_database
-      schema: public
-6. Run dbt Models and Tests
+cd medical_dbt
 
-From medical_dbt directory:
-
-
-dbt deps
+# Run all models
 dbt run
+
+# Run data tests
 dbt test
 
-Logging and Error Handling
+🏗️ 3. Project Structure
 
-The scraper logs key events including scraping start, end, message counts, and errors. Logs can be found in telegram_data_pipeline/logs/scraper.log.
+.
+├── data/
+│   └── raw/telegram_messages/YYYY-MM-DD/*.json
+├── scrapers/
+│   └── scrape_telegram.py
+├── loaders/
+│   └── load_raw_to_postgres.py
+├── medical_dbt/
+│   ├── dbt_project.yml
+│   ├── models/
+│   │   ├── staging/
+│   │   │   └── stg_telegram_messages.sql
+│   │   └── marts/
+│   │       ├── dims/
+│   │       │   ├── dim_channels.sql
+│   │       │   └── dim_dates.sql
+│   │       └── facts/
+│   │           └── fct_messages.sql
+│   ├── schema.yml
+├── .env
+└── requirements.txt
 
+🧱 4. DBT Star Schema Design
+🌟 Staging
 
-Docker Setup 
+stg_telegram_messages.sql
 
-To run everything via Docker:
-docker-compose up --build
+    Extracts raw JSON fields
+
+    Converts timestamps
+
+    Flags image presence
+
+🧭 Dimensions
+
+    dim_channels.sql: Telegram channel information
+
+    dim_dates.sql: Calendar/time dimension
+
+📊 Fact Table
+
+    fct_messages.sql: One row per message, joins with dimensions
+
+    Includes message metrics (e.g., length, has_image)
+
+📑 5. Testing and Documentation
+
+    dbt tests: not_null, unique, custom business rules
+
+    dbt docs: run dbt docs generate && dbt docs serve
+
+🙋 Contributors
+
+    Mewael Mizan Tesfay
