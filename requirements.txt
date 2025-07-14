@@ -11,7 +11,7 @@ python-dotenv
 telethon
 
 # Object Detection
-ultralytics
+ultralytics==8.1.23
 
 # Data orchestration
 dagster

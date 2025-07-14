@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: fct_image_detections
+    description: "Fact table linking YOLO object detections with messages"
+    columns:
+      - name: message_id
+        description: "FK to fct_messages"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fct_messages')
+              field: id
+      - name: detected_object_class
+        description: "Class of object detected in image"
+      - name: confidence_score
+        description: "Model's confidence in detection"
